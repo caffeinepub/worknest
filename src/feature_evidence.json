@@ -1,0 +1,230 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-internet-identity-authentication-and-gate-user-specific-sections-my-listings-my-bookings-profile-behind-sign-in-while-home-remains-browseable",
+      "featureTitle": "Implement Internet Identity authentication and gate user-specific sections (My Listings, My Bookings, Profile) behind sign-in, while Home remains browseable.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/AuthButtons.tsx",
+        "frontend/src/components/auth/AuthGate.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-4-tab-bottom-navigation-layout-with-these-sections-home-my-listings-my-bookings-profile-ensure-navigation-works-on-mobile-viewport-and-desktop",
+      "featureTitle": "Build a 4-tab bottom navigation layout with these sections: Home, My Listings, My Bookings, Profile; ensure navigation works on mobile viewport and desktop.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/navigation/BottomNav.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-home-render-a-grid-of-available-workspaces-showing-a-primary-display-photo-and-key-info-name-city-state-hourly-rate-in-inr-tapping-clicking-a-card-opens-a-workspace-details-view",
+      "featureTitle": "Home: render a grid of available workspaces showing a primary display photo and key info (name + city/state + hourly rate in INR). Tapping/clicking a card opens a workspace details view.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/workspaces/WorkspaceCard.tsx",
+        "frontend/src/lib/format.ts",
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-workspace-details-show-a-photo-gallery-location-amenities-per-hour-rate-inr-and-an-hours-input-as-the-user-enters-hours-compute-and-display-total-amount-hourly-rate-hours-in-inr-and-show-payment-option-buttons-mock-checkout",
+      "featureTitle": "Workspace Details: show a photo gallery, location, amenities, per-hour rate (INR), and an hours input. As the user enters hours, compute and display total amount (hourly rate × hours) in INR and show payment option buttons (mock checkout).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/bookings/MockCheckout.tsx",
+        "frontend/src/components/workspaces/WorkspaceGallery.tsx",
+        "frontend/src/hooks/useBookings.ts",
+        "frontend/src/hooks/useWorkspaces.ts",
+        "frontend/src/pages/WorkspaceDetailsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-my-listings-display-the-signed-in-user-s-listings-in-a-list-view-with-an-add-new-button-add-new-opens-a-form-to-create-a-listing-with-fields-name-hourly-rate-inr-location-amenities-provided-photos-and-other-details",
+      "featureTitle": "My Listings: display the signed-in user’s listings in a list view with an “Add New” button. Add New opens a form to create a listing with fields: name, hourly rate (INR), location, amenities provided, photos, and other details.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/workspaces/AmenitiesPicker.tsx",
+        "frontend/src/components/workspaces/PhotoPicker.tsx",
+        "frontend/src/hooks/useMyListings.ts",
+        "frontend/src/pages/AddListingPage.tsx",
+        "frontend/src/pages/MyListingsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-my-bookings-show-an-empty-state-until-the-user-books-a-place-after-booking-show-a-list-of-bookings-with-place-name-and-booked-time-selecting-a-booking-opens-a-booking-detail-screen-that-mirrors-workspace-details-but-without-payment-options-and-includes-hours-rate-and-total-paid",
+      "featureTitle": "My Bookings: show an empty state until the user books a place. After booking, show a list of bookings with place name and booked time; selecting a booking opens a booking detail screen that mirrors workspace details but without payment options and includes hours, rate, and total paid.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/bookings/BookingListItem.tsx",
+        "frontend/src/hooks/useMyBookings.ts",
+        "frontend/src/pages/BookingDetailsPage.tsx",
+        "frontend/src/pages/MyBookingsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-profile-show-a-round-avatar-and-identity-summary-for-the-signed-in-user-and-provide-a-menu-with-settings-edit-profile-rate-us-contact-us-need-help-and-sign-out-menu-items-can-be-placeholder-screens-modals-except-sign-out-which-must-function",
+      "featureTitle": "Profile: show a round avatar and identity summary for the signed-in user, and provide a menu with: Settings, Edit Profile, Rate Us, Contact Us, Need Help, and Sign Out. Menu items can be placeholder screens/modals except Sign Out which must function.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/profile/ProfileMenu.tsx",
+        "frontend/src/hooks/useUserProfile.ts",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/profile/PlaceholderScreen.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-seed-the-app-with-initial-indian-workspace-listings-ahmedabad-gujarat-and-other-indian-cities-including-realistic-amenities-hourly-inr-rates-and-bundled-images-so-the-home-grid-is-populated-immediately",
+      "featureTitle": "Seed the app with initial Indian workspace listings (Ahmedabad, Gujarat and other Indian cities) including realistic amenities, hourly INR rates, and bundled images so the Home grid is populated immediately.",
+      "files": [
+        "frontend/src/components/workspaces/PhotoPicker.tsx",
+        "frontend/src/data/seedWorkspaces.ts",
+        "frontend/src/hooks/useWorkspaces.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-visual-theme-for-worknest-colors-typography-spacing-and-component-styling-and-use-it-consistently-across-all-screens-avoid-a-blue-purple-primary-palette",
+      "featureTitle": "Apply a coherent visual theme for WorkNest (colors, typography, spacing, and component styling) and use it consistently across all screens; avoid a blue/purple primary palette.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-all-user-facing-text-in-the-application-ui-is-in-english",
+      "featureTitle": "Ensure all user-facing text in the application UI is in English.",
+      "files": [
+        "frontend/src/lib/uiText.ts",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/MyBookingsPage.tsx",
+        "frontend/src/pages/MyListingsPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/WorkspaceDetailsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

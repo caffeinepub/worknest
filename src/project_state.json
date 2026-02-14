@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build \"WorkNest\", an app-based marketplace for hourly booking of flexible workspaces, connecting workspace seekers with space providers. App includes bottom navigation (Home, My Listings, My Bookings, Profile), workspace browsing and detail pages with amenities and hourly pricing, booking/payment calculation in INR, provider listing management, booking history, and Google account profile with settings/options. Initial content should use Indian locations (e.g., Ahmedabad, Gujarat) with images.",
+  "architectural_notes": [
+    "Use bottom navigation with four primary sections: Home, My Listings, My Bookings, Profile.",
+    "All prices displayed/calculated in Indian Rupees (INR).",
+    "Seed initial marketplace content with Indian locations (Ahmedabad, Gujarat and other cities) and representative images."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Workspace photo: modern desk by window, warm daylight, laptop and notebook (worknest-photo-01.dim_1200x800.png)\n- Workspace photo: compact private room with desk and ergonomic chair, neutral tones (worknest-photo-02.dim_1200x800.png)\n- Workspace photo: small meeting room for 4, whiteboard visible (worknest-photo-03.dim_1200x800.png)\n- Workspace photo: quiet home office corner with plant and lamp, cozy minimal (worknest-photo-04.dim_1200x800.png)\n- Workspace photo: professional office cabin with glass partition, clean corporate (worknest-photo-05.dim_1200x800.png)\n- App logo: simple nest + desk icon, earthy palette, flat vector style (worknest-logo.dim_512x512.png)\n- Default user avatar: minimal silhouette in a circle, neutral palette (avatar-default.dim_256x256.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-authentication-and-gate-user-specific-sections-my-listings-my-bookings-profile-behind-sign-in-while-home-remains-browseable",
+      "title": "Implement Internet Identity authentication and gate user-specific sections (My Listings, My Bookings, Profile) behind sign-in, while Home remains browseable.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-4-tab-bottom-navigation-layout-with-these-sections-home-my-listings-my-bookings-profile-ensure-navigation-works-on-mobile-viewport-and-desktop",
+      "title": "Build a 4-tab bottom navigation layout with these sections: Home, My Listings, My Bookings, Profile; ensure navigation works on mobile viewport and desktop.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-home-render-a-grid-of-available-workspaces-showing-a-primary-display-photo-and-key-info-name-city-state-hourly-rate-in-inr-tapping-clicking-a-card-opens-a-workspace-details-view",
+      "title": "Home: render a grid of available workspaces showing a primary display photo and key info (name + city/state + hourly rate in INR). Tapping/clicking a card opens a workspace details view.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-workspace-details-show-a-photo-gallery-location-amenities-per-hour-rate-inr-and-an-hours-input-as-the-user-enters-hours-compute-and-display-total-amount-hourly-rate-hours-in-inr-and-show-payment-option-buttons-mock-checkout",
+      "title": "Workspace Details: show a photo gallery, location, amenities, per-hour rate (INR), and an hours input. As the user enters hours, compute and display total amount (hourly rate × hours) in INR and show payment option buttons (mock checkout).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-my-listings-display-the-signed-in-user-s-listings-in-a-list-view-with-an-add-new-button-add-new-opens-a-form-to-create-a-listing-with-fields-name-hourly-rate-inr-location-amenities-provided-photos-and-other-details",
+      "title": "My Listings: display the signed-in user’s listings in a list view with an “Add New” button. Add New opens a form to create a listing with fields: name, hourly rate (INR), location, amenities provided, photos, and other details.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-my-bookings-show-an-empty-state-until-the-user-books-a-place-after-booking-show-a-list-of-bookings-with-place-name-and-booked-time-selecting-a-booking-opens-a-booking-detail-screen-that-mirrors-workspace-details-but-without-payment-options-and-includes-hours-rate-and-total-paid",
+      "title": "My Bookings: show an empty state until the user books a place. After booking, show a list of bookings with place name and booked time; selecting a booking opens a booking detail screen that mirrors workspace details but without payment options and includes hours, rate, and total paid.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-profile-show-a-round-avatar-and-identity-summary-for-the-signed-in-user-and-provide-a-menu-with-settings-edit-profile-rate-us-contact-us-need-help-and-sign-out-menu-items-can-be-placeholder-screens-modals-except-sign-out-which-must-function",
+      "title": "Profile: show a round avatar and identity summary for the signed-in user, and provide a menu with: Settings, Edit Profile, Rate Us, Contact Us, Need Help, and Sign Out. Menu items can be placeholder screens/modals except Sign Out which must function.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-seed-the-app-with-initial-indian-workspace-listings-ahmedabad-gujarat-and-other-indian-cities-including-realistic-amenities-hourly-inr-rates-and-bundled-images-so-the-home-grid-is-populated-immediately",
+      "title": "Seed the app with initial Indian workspace listings (Ahmedabad, Gujarat and other Indian cities) including realistic amenities, hourly INR rates, and bundled images so the Home grid is populated immediately.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-visual-theme-for-worknest-colors-typography-spacing-and-component-styling-and-use-it-consistently-across-all-screens-avoid-a-blue-purple-primary-palette",
+      "title": "Apply a coherent visual theme for WorkNest (colors, typography, spacing, and component styling) and use it consistently across all screens; avoid a blue/purple primary palette.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-all-user-facing-text-in-the-application-ui-is-in-english",
+      "title": "Ensure all user-facing text in the application UI is in English.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create WorkNest app with 4-tab bottom navigation: Home, My Listings, My Bookings, Profile",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Home tab: grid of available workspaces with photos; tap opens workspace details (photos, location, amenities, per-hour rate)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Workspace details: enter number of hours, compute total (rate * hours), and provide payment options",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "My Listings tab: show user’s listed spaces and allow adding a new listing (name, rate, location, amenities, other details)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "My Bookings tab: empty state until booked; show list of bookings with place/time; booking detail shows workspace details and paid total (no payment options)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Profile tab: Google account avatar; menu options include settings, edit profile, rate us, contact us, need help, sign out",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Localization/content: use Indian Rupees (INR) and seed workspace images/location details for Ahmedabad, Gujarat and other Indian places",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Create the core data models and persistence in the Motoko single-actor backend for (a) workspace listings and (b) bookings, with ownership tied to the caller identity.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "WorkNest",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

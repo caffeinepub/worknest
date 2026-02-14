@@ -1,0 +1,52 @@
+export const uiText = {
+  nav: {
+    home: 'Home',
+    myListings: 'My Listings',
+    myBookings: 'My Bookings',
+    profile: 'Profile',
+  },
+  auth: {
+    signIn: 'Sign In',
+    signOut: 'Sign Out',
+    signingIn: 'Signing in...',
+    signInRequired: 'Sign In Required',
+    signInPrompt: 'Please sign in to access this section',
+  },
+  home: {
+    title: 'WorkNest',
+    subtitle: 'Find your perfect workspace',
+    noWorkspaces: 'No workspaces available at the moment.',
+  },
+  listings: {
+    title: 'My Listings',
+    subtitle: 'Manage your workspace listings',
+    addNew: 'Add New',
+    noListings: 'No listings yet',
+    noListingsPrompt: 'Start earning by listing your workspace',
+    addFirst: 'Add Your First Listing',
+  },
+  bookings: {
+    title: 'My Bookings',
+    subtitle: 'View your workspace bookings',
+    noBookings: 'No bookings yet',
+    noBookingsPrompt: 'Browse workspaces and make your first booking',
+  },
+  profile: {
+    title: 'Profile',
+    subtitle: 'Manage your account settings',
+    settings: 'Settings',
+    editProfile: 'Edit Profile',
+    rateUs: 'Rate Us',
+    contactUs: 'Contact Us',
+    needHelp: 'Need Help',
+  },
+  common: {
+    back: 'Back',
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    save: 'Save',
+    loading: 'Loading...',
+    error: 'Error',
+    success: 'Success',
+  },
+};

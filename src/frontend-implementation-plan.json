@@ -1,0 +1,382 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "WorkNest marketplace (frontend): bottom navigation, listings, bookings, profile, II-gated sections, INR + India seed data",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add Internet Identity sign-in/sign-out UI and gate My Listings, My Bookings, and Profile behind authentication while keeping Home browseable.",
+      "acceptanceCriteria": [
+        "Unauthenticated users can open Home and view workspace cards and details.",
+        "When navigating to My Listings, My Bookings, or Profile while signed out, the UI prompts the user to sign in using Internet Identity.",
+        "A visible Sign out action is available when signed in and returns the UI to signed-out state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the app router/layout shell that keeps Home publicly accessible and wraps My Listings/My Bookings/Profile routes with an auth guard using the existing useInternetIdentity hook (do not modify the hook). Use shadcn-ui components (e.g., Button, Card, Dialog) to present a consistent sign-in prompt UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AuthGate.tsx",
+          "operation": "create",
+          "description": "Implement an AuthGate wrapper that checks authentication state from useInternetIdentity; when signed out, render an English sign-in prompt with a Login button that calls login(), and when signed in, render children. Use shadcn-ui Button/Card for the prompt UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AuthButtons.tsx",
+          "operation": "create",
+          "description": "Create reusable Sign in / Sign out button(s) using useInternetIdentity.login() and useInternetIdentity.clear(), and ensure sign-out clears cached UI state by calling react-query QueryClient.clear() from the usage site (do not modify immutable hooks). Use shadcn-ui Button for styling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "create",
+          "description": "Wire sign-out action into the Profile screen via the shared AuthButtons component so signing out returns gated pages to the sign-in prompt. Use shadcn-ui components for menu UI. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement a persistent 4-tab bottom navigation (Home, My Listings, My Bookings, Profile) that works on mobile and desktop.",
+      "acceptanceCriteria": [
+        "Bottom navigation is persistent and highlights the active tab.",
+        "Each tab loads its respective page without full page refresh.",
+        "Navigation is usable on narrow screens (no overflow)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/navigation/BottomNav.tsx",
+          "operation": "create",
+          "description": "Create a responsive bottom navigation component with 4 tabs (Home, My Listings, My Bookings, Profile), active-state highlighting, and accessible labels in English. Use shadcn-ui Button (or similar) patterns for consistent interaction styling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Integrate BottomNav into the persistent app layout so it remains visible across all required routes, and connect each tab to client-side navigation (no full refresh). Use shadcn-ui layout primitives where appropriate. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Add global layout helpers for safe-area padding and bottom navigation spacing so content is not obscured by the persistent bottom bar on mobile. Keep all text styling and UI readable at small widths."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Home page: show a responsive grid of workspace cards (photo, name, city/state, INR hourly rate) and navigate to workspace details on selection.",
+      "acceptanceCriteria": [
+        "Home displays a responsive grid of workspace cards populated from backend listing data (or seeded data on first run).",
+        "Each card shows: image, listing name, location text, and formatted price like “₹250/hr”.",
+        "Selecting a card routes to a details screen for that workspace."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "create",
+          "description": "Implement the Home page with an English title/header and a responsive grid of workspace cards. Prefer backend-provided listing data when available; otherwise fall back to bundled seed listings. Use shadcn-ui Card components for workspace cards. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/workspaces/WorkspaceCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable WorkspaceCard showing primary image, name, location text, and formatted INR hourly rate (e.g., “₹250/hr”). Use shadcn-ui Card/Badge where appropriate. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/lib/format.ts",
+          "operation": "create",
+          "description": "Add formatting helpers for INR display (integer BigInt to “₹X/hr”) and other UI-safe formatting used across Home, Details, and Bookings (English-only outputs)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the Home route and the Workspace Details route, and ensure selecting a card navigates to the details screen via client-side routing. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Workspace Details: show gallery, amenities, INR/hour rate, hours input with validation, total calculation, and a mock payment flow that creates a booking on confirm.",
+      "acceptanceCriteria": [
+        "Details page shows multiple photos (gallery/carousel) sourced from the listing’s photo URLs.",
+        "Amenities are shown clearly (e.g., badges) for wifi, parking, desk, tea/coffee.",
+        "Hours input accepts only positive integers; invalid values show an inline validation message and disable payment buttons.",
+        "Total displays immediately as “Total: ₹X” where X = hourlyRateINR * hours.",
+        "Payment section contains at least 2 mock options (e.g., “Pay with UPI”, “Pay with Card”) and a confirmation step that creates a booking in the backend when confirmed (no real payment integration)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/WorkspaceDetailsPage.tsx",
+          "operation": "create",
+          "description": "Build the workspace details view with an image gallery sourced from listing photos, location, amenity badges, per-hour INR rate, and validated hours input (positive integers only). Show computed total immediately and disable payment actions when invalid. Use shadcn-ui Input, Badge, Button, and Dialog/AlertDialog for validation + confirmation UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/workspaces/WorkspaceGallery.tsx",
+          "operation": "create",
+          "description": "Create a simple gallery/carousel component to display multiple workspace photos from static asset paths. Use shadcn-ui primitives if helpful (e.g., Tabs) while keeping mobile usability. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/bookings/MockCheckout.tsx",
+          "operation": "create",
+          "description": "Implement a mock checkout section with at least two payment option buttons (e.g., “Pay with UPI”, “Pay with Card”) and a confirmation step. On confirm, call the backend actor’s bookWorkspace(workspaceId, hours) (through useActor) and route the user to My Bookings or show an English success message. Use shadcn-ui Button and Dialog/AlertDialog. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useWorkspaces.ts",
+          "operation": "create",
+          "description": "Add React Query hooks to load workspace data for details pages by id, combining backend data when available with local seeded listings as fallback. Ensure hooks remain browseable for signed-out users (do not require authentication for Home/Details)."
+        },
+        {
+          "path": "frontend/src/hooks/useBookings.ts",
+          "operation": "create",
+          "description": "Add React Query hooks that create bookings via the backend actor and invalidate relevant queries (e.g., the My Bookings list). Ensure authorization errors are handled with English messages in the UI."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Ensure the workspace details route is wired and reachable from Home card selection, and that booking creation success navigates appropriately without full refresh. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "My Listings: authenticated list view for the caller’s listings with empty state and an Add New form to create listings (with amenities + bundled photo selection).",
+      "acceptanceCriteria": [
+        "When signed in, My Listings shows the caller’s listings fetched from backend.",
+        "Empty state is shown when the user has no listings, with a clear “Add New” call-to-action.",
+        "Add New form validates required fields (at minimum: name, hourly rate, location).",
+        "Amenities can be selected (wifi, parking, desk, tea/coffee).",
+        "Photos can be selected from a predefined set of bundled images (no external upload requirement).",
+        "Submitting creates the listing in backend and returns to the list showing the newly created listing."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/MyListingsPage.tsx",
+          "operation": "create",
+          "description": "Implement My Listings page behind AuthGate. Fetch listings via backend actor getMyListings() and render a list, including an empty state with an English “Add New” CTA. Use shadcn-ui Card/Button for list + CTA. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AddListingPage.tsx",
+          "operation": "create",
+          "description": "Implement an Add New Listing form behind AuthGate with required field validation (name, hourly rate INR, location), amenities selection, bundled photo picker, and “Other details” description. On submit, call backend actor addWorkspace(...) and navigate back to My Listings showing the new item. Use shadcn-ui Form/Input/Textarea/Checkbox/Button components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/workspaces/AmenitiesPicker.tsx",
+          "operation": "create",
+          "description": "Create an amenities picker for wifi/parking/desk/tea-coffee that outputs the selected amenities in the format expected by the backend interface (string array). Use shadcn-ui Checkbox/Badge. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/workspaces/PhotoPicker.tsx",
+          "operation": "create",
+          "description": "Create a bundled photo selector that lets the user choose from predefined static images (no uploads). Use shadcn-ui Dialog/Card for selection UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useMyListings.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for getMyListings() and addWorkspace() mutations, including query invalidation and English error messages for authorization failures."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register and wire routes for My Listings and Add New Listing under the bottom navigation, ensuring gated access uses AuthGate. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "My Bookings: authenticated empty state and bookings list; booking details screen shows workspace info and paid summary without payment options.",
+      "acceptanceCriteria": [
+        "Empty state is shown when there are zero bookings.",
+        "Bookings list shows each item with listing name + bookedAt/time label.",
+        "Booking details screen shows: photo gallery, location, amenities, hourly rate, hours booked, and “Total paid: ₹X”, and does not show payment buttons.",
+        "Booking details are loaded from backend using booking id."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/MyBookingsPage.tsx",
+          "operation": "create",
+          "description": "Implement My Bookings behind AuthGate. Fetch bookings via backend actor getMyBookings() and show an English empty state when none exist. Render a list where each item includes the workspace name (resolved from workspace data) and a human-readable booking time label. Use shadcn-ui Card/Button for list items. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/BookingDetailsPage.tsx",
+          "operation": "create",
+          "description": "Implement a booking details screen behind AuthGate that displays the related workspace’s gallery, location, amenities, hourly rate, hours booked, and “Total paid: ₹X”; do not show payment buttons. Load booking data from backend by first loading getMyBookings() and selecting the requested item (route parameter can be a stable client identifier derived from the booking list). Use shadcn-ui components for layout and typography. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/bookings/BookingListItem.tsx",
+          "operation": "create",
+          "description": "Create a reusable booking list item component that shows workspace name and an English time label. Use shadcn-ui Card or Button styling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useMyBookings.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for getMyBookings() and derived selectors for a single booking used by BookingDetailsPage, including English error states for authorization failures."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register and wire routes for My Bookings and Booking Details under the bottom navigation, ensuring gated access uses AuthGate. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Profile: show a round avatar and identity summary plus a menu with requested items; placeholders are allowed except Sign Out which must function.",
+      "acceptanceCriteria": [
+        "Profile screen shows a circular avatar (generated placeholder is acceptable) and a user identifier (e.g., Internet Identity principal).",
+        "Tapping the avatar or a visible “Menu” area opens the list of options requested.",
+        "Each option opens a simple placeholder page/modal with English text except Sign Out which signs the user out.",
+        "After signing out, user-specific pages return to sign-in prompt state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Implement the Profile screen UI behind AuthGate: show the default avatar image and an identity summary (prefer a profile name when available, otherwise show a shortened principal string). Provide the requested menu options and ensure Sign Out calls clear() and resets UI. Use shadcn-ui Avatar (or equivalent), List, Dialog/Sheet for the menu. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileMenu.tsx",
+          "operation": "create",
+          "description": "Create a profile menu component that opens from tapping the avatar/menu area and lists: Settings, Edit Profile, Rate Us, Contact Us, Need Help, Sign Out. Use shadcn-ui Sheet/Dialog and Button components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/profile/PlaceholderScreen.tsx",
+          "operation": "create",
+          "description": "Create a reusable placeholder screen/modal content component used by Settings/Edit Profile/Rate Us/Contact Us/Need Help, with English-only text. Use shadcn-ui Card/Heading/Text. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useUserProfile.ts",
+          "operation": "create",
+          "description": "Add a hook to fetch the signed-in user’s profile via actor.getCallerUserProfile() and optionally prompt for a name on first login via actor.saveCallerUserProfile(), following the selected authorization component guidance to avoid modal flash (do not modify immutable hooks). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Ensure Profile route is registered and uses AuthGate, and that placeholder screens/modals are reachable from Profile menu interactions. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Seed the UI with Indian workspace listings (INR pricing, Indian cities) and bundled images so Home is populated immediately.",
+      "acceptanceCriteria": [
+        "On first use (or when backend has no listings), the app shows multiple listings with at least: Ahmedabad, Gujarat plus other Indian locations (e.g., Mumbai, Bengaluru, Delhi, Pune, Jaipur).",
+        "All prices display in INR with the ₹ symbol and “/hr” formatting.",
+        "Each seeded listing has at least 2 photos from bundled static assets."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/data/seedWorkspaces.ts",
+          "operation": "create",
+          "description": "Add a seed dataset of Indian workspace listings including Ahmedabad (Gujarat) plus other cities (Mumbai, Bengaluru, Delhi, Pune, Jaipur). Each item must include integer INR hourly rates, realistic amenity tags, and at least 2 photo paths pointing to bundled generated assets."
+        },
+        {
+          "path": "frontend/public/assets/generated/worknest-photo-01.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add generated workspace photo asset for seeded listings and photo pickers (static bundled file)."
+        },
+        {
+          "path": "frontend/public/assets/generated/worknest-photo-02.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add generated workspace photo asset for seeded listings and photo pickers (static bundled file)."
+        },
+        {
+          "path": "frontend/public/assets/generated/worknest-photo-03.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add generated workspace photo asset for seeded listings and photo pickers (static bundled file)."
+        },
+        {
+          "path": "frontend/public/assets/generated/worknest-photo-04.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add generated workspace photo asset for seeded listings and photo pickers (static bundled file)."
+        },
+        {
+          "path": "frontend/public/assets/generated/worknest-photo-05.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add generated workspace photo asset for seeded listings and photo pickers (static bundled file)."
+        },
+        {
+          "path": "frontend/public/assets/generated/worknest-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated WorkNest logo asset and wire it into the UI header/title areas as a static image."
+        },
+        {
+          "path": "frontend/public/assets/generated/avatar-default.dim_256x256.png",
+          "operation": "create",
+          "description": "Add generated default user avatar asset and use it for the Profile avatar display."
+        },
+        {
+          "path": "frontend/src/hooks/useWorkspaces.ts",
+          "operation": "modify",
+          "description": "Incorporate seeded listings as the immediate data source for Home browsing and workspace details when backend data is unavailable; ensure seeded listings include bundled photo paths and INR formatting. Verify any shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/workspaces/PhotoPicker.tsx",
+          "operation": "modify",
+          "description": "Ensure the photo picker offers the generated workspace photos (frontend/public/assets/generated/worknest-photo-01.dim_1200x800.png through worknest-photo-05.dim_1200x800.png) as selectable options for new listings. Use shadcn-ui for selection UI. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Apply a consistent WorkNest visual theme (not blue/purple primary) across screens and components, optimized for mobile readability.",
+      "acceptanceCriteria": [
+        "All pages share a consistent header/title style, card style, and spacing scale.",
+        "Primary and accent colors are not blue/purple; the palette feels suitable for a professional workspace marketplace.",
+        "UI remains readable and usable on mobile-sized screens."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define WorkNest theme tokens (CSS variables used by Tailwind/shadcn) with an earthy/non-blue non-purple primary palette, consistent typography scale, and spacing defaults. Ensure global body/background/text styles are readable on mobile."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create a shared layout wrapper used by all pages to enforce consistent header/title styling, spacing, and safe-area/padding around bottom navigation. Use shadcn-ui components (e.g., Separator, Card) where appropriate. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all pages in AppShell to ensure consistent theme usage, spacing, and header behavior across Home, Details, My Listings, My Bookings, and Profile. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Ensure all user-facing UI text is in English across the app.",
+      "acceptanceCriteria": [
+        "No UI labels, buttons, placeholders, or messages appear in a non-English language."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/uiText.ts",
+          "operation": "create",
+          "description": "Centralize common UI strings (navigation labels, empty states, validation messages, buttons, error messages) in English to reduce the risk of non-English text appearing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Ensure all Home UI labels, placeholders, and messages are English-only, using the centralized uiText helpers where applicable. Verify any shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/WorkspaceDetailsPage.tsx",
+          "operation": "modify",
+          "description": "Ensure all Details UI labels (hours input validation, total label, mock payment options, confirmation messaging) are English-only. Verify any shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/MyListingsPage.tsx",
+          "operation": "modify",
+          "description": "Ensure all My Listings UI labels (empty state, Add New CTA, errors) are English-only. Verify any shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/MyBookingsPage.tsx",
+          "operation": "modify",
+          "description": "Ensure all My Bookings UI labels (empty state, list headings, time label formatting) are English-only. Verify any shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Ensure all Profile menu items and placeholder content are English-only, and that the Sign Out label/action is clear. Verify any shadcn-ui component usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

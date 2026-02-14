@@ -1,0 +1,172 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-13T16:22:34.311Z",
+  "summary": "Diff adds a Motoko backend actor with workspace/booking storage plus a new TanStack Router-based frontend shell with bottom navigation, auth gate/buttons, booking mock checkout UI, workspace card/gallery, and India seed workspace data. Several core BuildRequest requirements (notably backend API shape/data model, seeded data behavior, and multiple page flows) are not evidenced or appear mismatched in the diff summary.",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Backend exposes methods to list all listings, get listing by id, create listing, list caller listings, create booking, list caller bookings, and get booking by id with correct access control; listings/bookings must store specified fields and INR integer money fields.",
+      "reason": "The shown backend code only evidences addWorkspace, getMyListings, bookWorkspace, getMyBookings (truncated), and user profile methods. It does not evidence list-all listings, get-listing-by-id, get-booking-by-id, or the required data fields (createdAt, description, hourlyRateINR naming, photo URLs, bookedAt label, etc.).",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Listings store: id, owner, name/title, location (city/state/address text), hourlyRateINR, amenities (wifi/parking/desk/teaCoffee booleans or tags), description/other details, photo URLs, createdAt.",
+      "reason": "Workspace type in backend uses fields {id, name, hourlyRate, location, amenities:[Text], photos:[Text], owner} and shows no description/createdAt, and uses hourlyRate (not hourlyRateINR).",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Bookings store: id, listingId, booker, hours, hourlyRateINRAtBooking, totalPaidINR, bookedAt, and a human-readable time label.",
+      "reason": "Booking type in backend is {workspaceId, user, hours, totalPaid, bookingTime}; it does not evidence booking id in the record, hourlyRateINRAtBooking, totalPaidINR naming, bookedAt, or a time label.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-1",
+      "requirement": "Gate My Listings, My Bookings, and Profile behind Internet Identity sign-in while keeping Home browseable; show sign-in prompt when navigating to gated pages signed out.",
+      "reason": "AuthGate component exists, but the diff summary does not show it being applied to the /my-listings, /my-bookings, or /profile routes/pages.",
+      "evidence": [
+        "frontend/src/components/auth/AuthGate.tsx",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Home renders a responsive grid of workspace cards populated from backend (or seeded data) and routes to a workspace details screen on selection.",
+      "reason": "WorkspaceCard exists, but the diff summary does not include HomePage implementation or the data fetching/wiring that renders a grid and routes on selection.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/workspaces/WorkspaceCard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Workspace Details shows gallery, amenities, hours input validation (positive integers), computed total, and mock payment options with confirmation that creates a booking.",
+      "reason": "MockCheckout and WorkspaceGallery exist, but the diff summary does not evidence WorkspaceDetailsPage implementing hours input validation, total computation, or integrating MockCheckout for booking creation.",
+      "evidence": [
+        "frontend/src/components/bookings/MockCheckout.tsx",
+        "frontend/src/components/workspaces/WorkspaceGallery.tsx",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "My Listings shows caller listings, empty state, and Add New form with validation and photo selection from bundled images; submitting creates listing and returns to list.",
+      "reason": "Hooks and pickers exist (useMyListings/useAddWorkspace, AmenitiesPicker, PhotoPicker), but the diff summary does not include MyListingsPage/AddListingPage implementations showing list/empty state/form validation and navigation flow.",
+      "evidence": [
+        "frontend/src/hooks/useMyListings.ts",
+        "frontend/src/components/workspaces/AmenitiesPicker.tsx",
+        "frontend/src/components/workspaces/PhotoPicker.tsx",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "My Bookings shows empty state then list with place name + booked time; booking details screen mirrors workspace details without payment and shows total paid; loaded by booking id.",
+      "reason": "useMyBookings and BookingListItem exist, but the diff summary does not include MyBookingsPage/BookingDetailsPage implementations, nor evidence of backend get-booking-by-id supporting details by booking id.",
+      "evidence": [
+        "frontend/src/hooks/useMyBookings.ts",
+        "frontend/src/components/bookings/BookingListItem.tsx",
+        "frontend/src/App.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Profile shows round avatar + principal/identity summary and menu items (Settings, Edit Profile, Rate Us, Contact Us, Need Help, Sign Out); Sign Out must function.",
+      "reason": "ProfileMenu and SignOutButton exist, but the diff summary does not include ProfilePage implementation showing avatar + identity summary and the menu opening behavior.",
+      "evidence": [
+        "frontend/src/components/profile/ProfileMenu.tsx",
+        "frontend/src/components/auth/AuthButtons.tsx",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Seed the app so Home is populated immediately; on first use or when backend has no listings, show multiple Indian listings; each seeded listing has at least 2 bundled photos.",
+      "reason": "Seed data is present in frontend, but several seeded listings only include a single photo (e.g., ids 3 and 7). Also, there is no evidence of a 'first run when backend empty' seeding mechanism being applied (only a static seed file is shown).",
+      "evidence": [
+        "frontend/src/data/seedWorkspaces.ts"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Apply a coherent visual theme across screens and avoid a blue/purple primary palette.",
+      "reason": "The diff summary shows general Tailwind class usage and ThemeProvider, but does not evidence the actual theme configuration/colors ensuring the palette is not blue/purple or that it is consistently applied across all screens.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/components/navigation/BottomNav.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Backend user profile storage and profile CRUD methods with authorization checks (getCallerUserProfile, getUserProfile, saveCallerUserProfile).",
+      "reason": "BuildRequest does not require backend persistence for user profiles; Profile requirements are UI-focused and allow placeholder screens/modals.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useUserProfile.ts"
+      ]
+    },
+    {
+      "description": "Custom access control system with admin token initialization via secret URL parameter (caffeineAdminToken) and authorization mixins.",
+      "reason": "BuildRequest requires ownership tied to caller identity but does not request an admin/permission system, secret-token initialization, or authorization mixin framework.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useActor.ts"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/AuthButtons.tsx",
+    "frontend/src/components/auth/AuthGate.tsx",
+    "frontend/src/components/bookings/BookingListItem.tsx",
+    "frontend/src/components/bookings/MockCheckout.tsx",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/components/navigation/BottomNav.tsx",
+    "frontend/src/components/profile/ProfileMenu.tsx",
+    "frontend/src/components/workspaces/AmenitiesPicker.tsx",
+    "frontend/src/components/workspaces/PhotoPicker.tsx",
+    "frontend/src/components/workspaces/WorkspaceCard.tsx",
+    "frontend/src/components/workspaces/WorkspaceGallery.tsx",
+    "frontend/src/data/seedWorkspaces.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useBookings.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useMyBookings.ts",
+    "frontend/src/hooks/useMyListings.ts",
+    "frontend/src/hooks/useUserProfile.ts",
+    "frontend/src/hooks/useWorkspaces.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/format.ts",
+    "frontend/src/lib/uiText.ts",
+    "frontend/src/lib/utils.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AddListingPage.tsx",
+    "frontend/src/pages/BookingDetailsPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/MyBookingsPage.tsx",
+    "frontend/src/pages/MyListingsPage.tsx",
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/pages/WorkspaceDetailsPage.tsx",
+    "frontend/src/pages/profile/PlaceholderScreen.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

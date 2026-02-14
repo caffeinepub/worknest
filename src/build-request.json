@@ -1,0 +1,238 @@
+{
+  "kind": "build_request",
+  "title": "Build WorkNest marketplace app with bottom navigation, listings, bookings, and profile (INR + India seed data)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement Internet Identity authentication and gate user-specific sections (My Listings, My Bookings, Profile) behind sign-in, while Home remains browseable.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "My profile will show a round dp of the google account by which i logged in ... and sign out"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated users can open Home and view workspace cards and details.",
+        "When navigating to My Listings, My Bookings, or Profile while signed out, the UI prompts the user to sign in using Internet Identity.",
+        "A visible Sign out action is available when signed in and returns the UI to signed-out state."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Create the core data models and persistence in the Motoko single-actor backend for (a) workspace listings and (b) bookings, with ownership tied to the caller identity.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Home will have a grid structure which will show display photo of every places available vacant",
+          "My listings will show the list of places which i have listed to app",
+          "My bookings will be blank untill i book any place"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes methods to: list all available listings; get a listing by id; create a listing (only for signed-in users); list the caller’s own listings; create a booking for a listing (only for signed-in users); list the caller’s bookings; get a booking by id (accessible to booking owner and/or listing owner).",
+        "Listings store: id, owner, name/title, location (city/state/address text), hourlyRateINR, amenities (wifi/parking/desk/teaCoffee booleans or tags), description/other details, photo URLs (static asset paths), createdAt.",
+        "Bookings store: id, listingId, booker, hours, hourlyRateINRAtBooking, totalPaidINR, bookedAt, and a human-readable time label for display.",
+        "All money values are stored as integers in INR (no floating point)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Build a 4-tab bottom navigation layout with these sections: Home, My Listings, My Bookings, Profile; ensure navigation works on mobile viewport and desktop.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "There should be 4 sections at bottom of the screen 1. Home 2. My listings 3. My bookings 4. Profile"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Bottom navigation is persistent and highlights the active tab.",
+        "Each tab loads its respective page without full page refresh.",
+        "Navigation is usable on narrow screens (no overflow)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Home: render a grid of available workspaces showing a primary display photo and key info (name + city/state + hourly rate in INR). Tapping/clicking a card opens a workspace details view.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Home will have a grid structure which will show display photo of every places available vacant",
+          "On taping on a particular pic It will go inn which will show all photos ... and other details like location, amanities, per hour rate."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home displays a responsive grid of workspace cards populated from backend listing data (or seeded data on first run).",
+        "Each card shows: image, listing name, location text, and formatted price like “₹250/hr”.",
+        "Selecting a card routes to a details screen for that workspace."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Workspace Details: show a photo gallery, location, amenities, per-hour rate (INR), and an hours input. As the user enters hours, compute and display total amount (hourly rate × hours) in INR and show payment option buttons (mock checkout).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "And below that one text box which will ask for number of hours By entering a number there It will give total amount to be paid and options to pay (rate*number of hours)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Details page shows multiple photos (gallery/carousel) sourced from the listing’s photo URLs.",
+        "Amenities are shown clearly (e.g., badges) for wifi, parking, desk, tea/coffee.",
+        "Hours input accepts only positive integers; invalid values show an inline validation message and disable payment buttons.",
+        "Total displays immediately as “Total: ₹X” where X = hourlyRateINR * hours.",
+        "Payment section contains at least 2 mock options (e.g., “Pay with UPI”, “Pay with Card”) and a confirmation step that creates a booking in the backend when confirmed (no real payment integration)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "My Listings: display the signed-in user’s listings in a list view with an “Add New” button. Add New opens a form to create a listing with fields: name, hourly rate (INR), location, amenities provided, photos, and other details.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "My listings will show the list of places which i have listed to app ... which will have \"add new\" button",
+          "On taping add new button It will ask details like name, rate, location, amanities provided, other details."
+        ]
+      },
+      "acceptanceCriteria": [
+        "When signed in, My Listings shows the caller’s listings fetched from backend.",
+        "Empty state is shown when the user has no listings, with a clear “Add New” call-to-action.",
+        "Add New form validates required fields (at minimum: name, hourly rate, location).",
+        "Amenities can be selected (wifi, parking, desk, tea/coffee).",
+        "Photos can be selected from a predefined set of bundled images (no external upload requirement).",
+        "Submitting creates the listing in backend and returns to the list showing the newly created listing."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "My Bookings: show an empty state until the user books a place. After booking, show a list of bookings with place name and booked time; selecting a booking opens a booking detail screen that mirrors workspace details but without payment options and includes hours, rate, and total paid.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "My bookings will be blank untill i book any place",
+          "When booked it will show a list format which will say place and time on display",
+          "... booking it will show all details ... (this time payment option will not be there and rate*hours and total payment done will be shown)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Empty state is shown when there are zero bookings.",
+        "Bookings list shows each item with listing name + bookedAt/time label.",
+        "Booking details screen shows: photo gallery, location, amenities, hourly rate, hours booked, and “Total paid: ₹X”, and does not show payment buttons.",
+        "Booking details are loaded from backend using booking id."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Profile: show a round avatar and identity summary for the signed-in user, and provide a menu with: Settings, Edit Profile, Rate Us, Contact Us, Need Help, and Sign Out. Menu items can be placeholder screens/modals except Sign Out which must function.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "My profile will show a round dp ... tapping on that it will show some basic options like settings, edit profile, rate us, contact us, need help, and sign out"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Profile screen shows a circular avatar (generated placeholder is acceptable) and a user identifier (e.g., Internet Identity principal).",
+        "Tapping the avatar or a visible “Menu” area opens the list of options requested.",
+        "Each option opens a simple placeholder page/modal with English text except Sign Out which signs the user out.",
+        "After signing out, user-specific pages return to sign-in prompt state."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Seed the app with initial Indian workspace listings (Ahmedabad, Gujarat and other Indian cities) including realistic amenities, hourly INR rates, and bundled images so the Home grid is populated immediately.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Use currency of indian rupees and use images and location details of ahmedabad, gujarat more also other indian places"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On first use (or when backend has no listings), the app shows multiple listings with at least: Ahmedabad, Gujarat plus other Indian locations (e.g., Mumbai, Bengaluru, Delhi, Pune, Jaipur).",
+        "All prices display in INR with the ₹ symbol and “/hr” formatting.",
+        "Each seeded listing has at least 2 photos from bundled static assets."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Apply a coherent visual theme for WorkNest (colors, typography, spacing, and component styling) and use it consistently across all screens; avoid a blue/purple primary palette.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All pages share a consistent header/title style, card style, and spacing scale.",
+        "Primary and accent colors are not blue/purple; the palette feels suitable for a professional workspace marketplace.",
+        "UI remains readable and usable on mobile-sized screens."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Ensure all user-facing text in the application UI is in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Use English for any user-facing text in the build request."
+        ]
+      },
+      "acceptanceCriteria": [
+        "No UI labels, buttons, placeholders, or messages appear in a non-English language."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
+    "Do not edit files under frontend immutable paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui); compose around them instead.",
+    "No real payment gateway integration is required/expected; payment options must be implemented as a mock flow that results in a booking record.",
+    "Third-party Google authentication is not supported; use Internet Identity for sign-in while still providing a profile avatar UI."
+  ],
+  "nonGoals": [
+    "Implementing real payments (UPI/Card processing) or payment provider integration.",
+    "Map/GPS-based nearby search and geolocation features.",
+    "Real-time availability updates or chat between seeker and provider.",
+    "Featured listings, subscriptions, corporate partnerships, or commission accounting beyond basic booking creation."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Workspace photo: modern desk by window, warm daylight, laptop and notebook (worknest-photo-01.dim_1200x800.png)",
+      "Workspace photo: compact private room with desk and ergonomic chair, neutral tones (worknest-photo-02.dim_1200x800.png)",
+      "Workspace photo: small meeting room for 4, whiteboard visible (worknest-photo-03.dim_1200x800.png)",
+      "Workspace photo: quiet home office corner with plant and lamp, cozy minimal (worknest-photo-04.dim_1200x800.png)",
+      "Workspace photo: professional office cabin with glass partition, clean corporate (worknest-photo-05.dim_1200x800.png)",
+      "App logo: simple nest + desk icon, earthy palette, flat vector style (worknest-logo.dim_512x512.png)",
+      "Default user avatar: minimal silhouette in a circle, neutral palette (avatar-default.dim_256x256.png)"
+    ],
+    "edits": []
+  }
+}
